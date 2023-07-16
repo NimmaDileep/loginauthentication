@@ -9,6 +9,7 @@ const cors = require('cors');
 const session = require('express-session'); // add this
 
 const app = express();
+const bcrypt = require('bcrypt');
 
 app.use(cors({
     origin: 'http://localhost:3000', // specify the client origin to be allowed by CORS
@@ -30,25 +31,44 @@ app.use(passport.initialize());
 app.use(passport.session()); // this middleware is required to make passport use sessions
 
 
-passport.use(new LocalStrategy((username, password, done) => {
-    console.log('LocalStrategy called with:', { username, password });
+// passport.use(new LocalStrategy((username, password, done) => {
+//     console.log('LocalStrategy called with:', { username, password });
+//
+//     User.findOne({ username: username })
+//         .then(user => {
+//             console.log('User.findOne returned:', user);
+//
+//             if (!user) return done(null, false);
+//             if (password === user.password) {
+//                 return done(null, user);
+//             } else {
+//                 return done(null, false);
+//             }
+//         })
+//         .catch(err => {
+//             console.error('Error in User.findOne:', err);
+//             done(err)
+//         });
+// }));
 
+passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username: username })
         .then(user => {
-            console.log('User.findOne returned:', user);
-
             if (!user) return done(null, false);
-            if (password === user.password) {
-                return done(null, user);
-            } else {
-                return done(null, false);
-            }
+            bcrypt.compare(password, user.password, function(err, result) {
+                if (result) {
+                    return done(null, user);
+                } else {
+                    return done(null, false);
+                }
+            });
         })
         .catch(err => {
             console.error('Error in User.findOne:', err);
             done(err)
         });
 }));
+
 
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
@@ -59,13 +79,32 @@ passport.use(new GoogleStrategy({
         return cb(null, profile);
     }));
 
+// app.post('/register', (req, res) => {
+//     const { username, password } = req.body;
+//     const newUser = new User({ username, password });
+//
+//     newUser.save()
+//         .then(() => res.json('User added!'))
+//         .catch(err => res.status(400).json('Error: ' + err));
+// });
+
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
-    const newUser = new User({ username, password });
 
-    newUser.save()
-        .then(() => res.json('User added!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+    bcrypt.hash(password, 10, function(err, hash) {
+        if (err) {
+            return res.status(500).json({ error: 'Error hashing password' });
+        }
+        const newUser = new User({ username, password: hash });
+        newUser.save()
+            .then(() => res.json('User added!'))
+            .catch(err => res.status(400).json('Error: ' + err));
+    });
+});
+
+app.get('/logout', (req, res) => {
+    req.logout();
+    res.send('Logged out');
 });
 
 passport.serializeUser(function(user, done) {

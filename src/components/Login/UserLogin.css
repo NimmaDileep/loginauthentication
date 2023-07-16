@@ -46,6 +46,12 @@
     margin-bottom: 1em;
 }
 
+.form-wrapper .success-message{
+    color: green;
+    text-align: center;
+    margin-bottom: 1em;
+}
+
 .form-wrapper button[type="button"]:nth-of-type(1) {
     background: #007bff;
 }

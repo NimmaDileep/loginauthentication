@@ -9,6 +9,7 @@ const UserLogin = () => {
     });
 
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -40,8 +41,7 @@ const UserLogin = () => {
 
         axios.post("http://localhost:5001/login", user)
             .then(res => {
-                console.log("$$$$$$$$$")
-                alert(res.data.message);
+                setSuccess("Login Successful")
                 window.location = "/dashboard";
             })
             .catch(err => {
@@ -59,7 +59,7 @@ const UserLogin = () => {
         axios.post("http://localhost:5001/register", user)
             .then(res => {
                 console.log("User successfully created")
-                setError("Registration successful proceed and login with credentials");
+                setSuccess("Registration successful proceed and login with credentials");
             })
             .catch(err => {
                 setError("Something went wrong. Please try again.");
@@ -70,6 +70,7 @@ const UserLogin = () => {
         <div className="form-wrapper">
             <h2>Login</h2>
             {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
             <input type="text" name="username" value={user.username} onChange={handleChange} placeholder="Username"/>
             <input type="password" name="password" value={user.password} onChange={handleChange} placeholder="Password"/>
             <div className="button-container">
