@@ -8,7 +8,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     const logout = () => {
-        navigate('/'); 
+        navigate('/');
     }
 
     return (
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
                 <div style={{ width: '50%', border: '1px solid black' }}>
                     <h3 style={{display: 'flex', justifyContent: 'center'}}>Haritha's Portfolio</h3>
-                    <iframe src="https://main.d2b7wo8vl2v7hh.amplifyapp.com/" style={{ width: '100%', height: '100%' }} />
+                    <iframe src="https://main.dj9uhk7yapy7m.amplifyapp.com/" style={{ width: '100%', height: '100%' }} />
                 </div>
             </div>
         </div>
