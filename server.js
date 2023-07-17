@@ -6,13 +6,13 @@ const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('./models/Users');
 const cors = require('cors');
-const session = require('express-session'); // add this
+const session = require('express-session');
 
 const app = express();
 const bcrypt = require('bcrypt');
 
 app.use(cors({
-    origin: 'http://localhost:3000', // specify the client origin to be allowed by CORS
+    origin: 'http://localhost:3000', // client origin to be allowed by CORS
     methods: ['GET', 'POST'], // allowed methods
     credentials: true // cookies can be sent along with the requests
 }));
@@ -69,15 +69,17 @@ passport.use(new LocalStrategy((username, password, done) => {
         });
 }));
 
-
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         callbackURL: "/auth/google/callback"
     },
-    (accessToken, refreshToken, profile, cb) => {
-        return cb(null, profile);
+    function(accessToken, refreshToken, profile, cb) {
+        User.findOrCreate({ googleId: profile.id }, function (err, user) {
+            return cb(err, user);
+        });
     }));
+
 
 // app.post('/register', (req, res) => {
 //     const { username, password } = req.body;
@@ -131,11 +133,15 @@ app.post('/login', (req, res, next) => {
 });
 
 
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    res.redirect('/dashboard');
-});
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    function(req, res) {
+        res.redirect('/dashboard');
+    });
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

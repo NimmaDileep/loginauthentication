@@ -6,25 +6,33 @@
     height: 100vh;
     background: #f4f4f4;
     font-family: Arial, sans-serif;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 15px;
+    background: linear-gradient(to right top, #add8e6, #d8bfd8);
 }
 
 .form-wrapper h2 {
     font-size: 2em;
     margin-bottom: 1em;
+    color: #fff;
 }
 
 .form-wrapper input[type="text"], .form-wrapper input[type="password"] {
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
-    width: 80%;
+    width: 100%;
     margin-bottom: 1em;
+    background: #fff;
 }
 
 .form-wrapper .button-container {
     display: flex;
     justify-content: space-around;
-    width: 80%;
+    width: 100%;
 }
 
 .form-wrapper button {
@@ -34,20 +42,22 @@
     color: #fff;
     font-weight: bold;
     cursor: pointer;
+    transition: opacity .3s ease;
+    background: #000;
 }
 
 .form-wrapper button:hover {
-    opacity: 0.8;
+    opacity: 0.7;
 }
 
 .form-wrapper .error-message {
-    color: red;
+    color: #ff1e56;
     text-align: center;
     margin-bottom: 1em;
 }
 
 .form-wrapper .success-message{
-    color: green;
+    color: #4caf50;
     text-align: center;
     margin-bottom: 1em;
 }

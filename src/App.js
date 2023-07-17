@@ -6,7 +6,7 @@ import Dashboard from './components/Dashboard/Dashboard';
 function App() {
     return (
         <Router>
-            <div>
+            <div className={"hello"}>
                 <Routes>
                     <Route path="/" element={<UserLogin />} />
                     <Route path="/dashboard" element={<Dashboard />} />
