@@ -12,9 +12,9 @@ const app = express();
 const bcrypt = require('bcrypt');
 
 app.use(cors({
-    origin: 'http://localhost:3000', // client origin to be allowed by CORS
-    methods: ['GET', 'POST'], // allowed methods
-    credentials: true // cookies can be sent along with the requests
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+    credentials: true
 }));
 
 app.use(express.json());
@@ -28,28 +28,8 @@ app.use(session({
 mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(passport.initialize());
-app.use(passport.session()); // this middleware is required to make passport use sessions
+app.use(passport.session());
 
-
-// passport.use(new LocalStrategy((username, password, done) => {
-//     console.log('LocalStrategy called with:', { username, password });
-//
-//     User.findOne({ username: username })
-//         .then(user => {
-//             console.log('User.findOne returned:', user);
-//
-//             if (!user) return done(null, false);
-//             if (password === user.password) {
-//                 return done(null, user);
-//             } else {
-//                 return done(null, false);
-//             }
-//         })
-//         .catch(err => {
-//             console.error('Error in User.findOne:', err);
-//             done(err)
-//         });
-// }));
 
 passport.use(new LocalStrategy((username, password, done) => {
     User.findOne({ username: username })
@@ -80,15 +60,6 @@ passport.use(new GoogleStrategy({
         });
     }));
 
-
-// app.post('/register', (req, res) => {
-//     const { username, password } = req.body;
-//     const newUser = new User({ username, password });
-//
-//     newUser.save()
-//         .then(() => res.json('User added!'))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
 
 app.post('/register', (req, res) => {
     const { username, password } = req.body;

@@ -2,26 +2,22 @@ import React from 'react';
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import background from "./bgi.jpg"
+import './Dashboard.css'
 
 const Dashboard = () => {
-    const navigate = useNavigate(); // Get the navigate function
+    const navigate = useNavigate();
 
-    const logout = () => { // Define the logout function
-        axios.get("http://localhost:5001/logout")
-            .then(res => {
-                console.log("User successfully logged out");
-                navigate('/'); // Redirect to the login page
-            })
-            .catch(err => {
-                console.log("Something went wrong during logout: ", err);
-            });
+    const logout = () => {
+        navigate('/'); 
     }
 
     return (
         <div style={{backgroundImage: `url(${background})`}}>
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 <h2>Dashboard</h2> <br/>
-                {/*<button type="button" onClick={logout}>Logout</button>*/}
+                <div className="logoutButton-container">
+                    <button type="button" className="logoutButton" onClick= {logout} >Logout</button>
+                </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', height: '80vh' }}>

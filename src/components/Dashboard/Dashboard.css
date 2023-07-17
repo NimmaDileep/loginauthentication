@@ -1,0 +1,22 @@
+.logoutButton-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 75%;
+    height: 50%;
+    margin-top: 1.5%;
+}
+
+.logoutButton {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity .3s ease;
+    background: indianred;
+}
+
+.logoutButton:hover {
+    opacity: 0.7;
+}
